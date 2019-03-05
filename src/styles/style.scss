@@ -228,7 +228,7 @@ $secondaryColor: white;
                             }
                         }
                     }
-                                        &:hover {
+                        &:hover {
                         background-color: $secondaryColor;
                         color: $mainColor!important;
                         transform: scale(1.2);
@@ -253,7 +253,7 @@ $secondaryColor: white;
                 justify-content: space-around;
                 transition: all .4s;
                 &:hover{
-                    transition: all .4s;
+                    transition: all .1s;
                     background-color: $secondaryColor;
                     color: $mainColor;
                 }

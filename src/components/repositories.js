@@ -14,7 +14,7 @@ class Repos extends Component {
          this.FetchRepositories()
     }
     FetchRepositories(){
-        const urlTofetch = `https://api.github.com/users/${this.props.state.username}/repos?sort=desc`
+        const urlTofetch = `https://api.github.com/users/${this.props.state.username}/repos?sort=created`
         if(this.props.state.username === undefined){
             return false;
         }
