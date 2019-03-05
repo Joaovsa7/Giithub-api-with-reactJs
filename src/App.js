@@ -11,7 +11,6 @@ class App extends Component {
     super(props)
     this.state = {
       user: [{
-        username: undefined,
         login: undefined,
         avatar_url: undefined,
         followers: undefined,
@@ -25,8 +24,10 @@ class App extends Component {
       anyError: false,
       bigThanTwo: false,
       showRep: false,
+      value: ''
     }
     this.fetchData = this.fetchData.bind(this)
+    this.handleChange = this.handleChange.bind(this)
   }
   componentDidMount(){
     if(this.state.username === undefined) return false;
@@ -35,32 +36,34 @@ class App extends Component {
   fetchData(){
     const controller = new AbortController();
     const signal = controller.signal
-    if(this.state.username === undefined || this.state.username === ''){
-      this.setState({
-        noInput: true,
-        anyError: true,
-      })
+    if(this.state.value === undefined || this.state.value === ''){
+      this.setState({noInput: true, anyError: true})
       controller.abort();
       return false;
     }
-    const urlTofetch = `https://api.github.com/users/${this.state.username}`
+    const urlTofetch = `https://api.github.com/users/${this.state.value}`
     fetch(urlTofetch)
     .then(response => response.json())
-    .then(data => {this.setState({user:[data], showRep: true,})
+    .then(data => {
+      this.setState({
+        user:[data], 
+        showRep: true, 
+        value: ''})
       if(data.login === undefined){
-        this.setState({noInput: false, anyError: true, showRep: false})
+        this.setState({anyError: true, showRep: false, value: ''})
         controller.abort();
       }
       if(data.id === undefined){
         this.setState({anyError: true})
       }
-    }
-    )
+    })
+    //preciso tratar melhor o erro do .catch
     .catch(err => {this.setState({anyError: true})});
   }
-  handleChange = (e) => {
+  handleChange(event){
       this.setState({
-        username: e.target.value,
+        value: event.target.value.trim(),
+        username: event.target.value.trim(),
         anyError: false,
       })
     }

@@ -10,7 +10,7 @@ const Container = (props) => {
             </div>
             <div id="content">
                 <div id="search" className={`${props.estado.showSearch === false ? 'hide' : ''}`}>
-                    <input type="text" placeholder="Digite o seu usuário no github sem espaços"  onChange={props.handleChange} />
+                    <input type="text" placeholder="Digite o seu usuário no Github" value={props.state.value}  onChange={props.handleChange} />
                     <button onClick={props.fetchData}>Get user </button>
                 </div>     
                 {props.children}        
