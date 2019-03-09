@@ -5,13 +5,13 @@ class CardUser extends Component {
     render(){
         return(
             <Fragment>
-                {this.props.user.map((cardUser) => (
+                {this.props.state.user.map((cardUser) => (
                 <div id="info" key={cardUser.id}>
                     <div id="img">
                         <img src={cardUser.avatar_url === undefined ? require('../assets/default.jpg') : `${cardUser.avatar_url}`} alt="profile pic" />
                     </div>
                     <div id="description">
-                        <h3>{cardUser.login === undefined ? 'Search your user' : cardUser.login}</h3>
+                        <h3>{cardUser.name === undefined ? 'Search your user' : cardUser.name}</h3>
                         <p>{cardUser.bio === undefined || cardUser.bio === null ? 'Este usuário não possui biografia no github, provavelmente esqueceu de por ou não se importa com isso' : cardUser.bio}</p>
                         <div id="boxInfos">
                             <div className="apiInfos">

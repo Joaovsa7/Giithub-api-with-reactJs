@@ -13,10 +13,7 @@ const Container = (props) => {
                     <input type="text" placeholder="Digite o seu usuário no Github" value={props.state.value}  onChange={props.handleChange} />
                     <button onClick={props.fetchData}>Get user </button>
                 </div>     
-                {props.children}        
-                {/* <div id="getUser">
-                    <button onClick={() => this.props.toConcat()} className={`${props.state.bigThanTwo === false ? '' : 'hide'}`}>+</button>
-                </div> */}
+                {props.children}
                 <nav>
                     <div>
                         <Link to="/">Perfil</Link>

@@ -11,14 +11,16 @@ class App extends Component {
     super(props)
     this.state = {
       user: [{
+        username: undefined,
         login: undefined,
         avatar_url: undefined,
         followers: undefined,
         following: undefined,
         location: undefined,
         html_url: undefined,
-        id: undefined
+        id: undefined,
       }],
+      name: undefined,
       repos: [],
       noInput: false,
       anyError: false,
@@ -53,9 +55,6 @@ class App extends Component {
         this.setState({anyError: true, showRep: false, value: ''})
         controller.abort();
       }
-      if(data.id === undefined){
-        this.setState({anyError: true})
-      }
     })
     //preciso tratar melhor o erro do .catch
     .catch(err => {this.setState({anyError: true})});
@@ -80,9 +79,9 @@ class App extends Component {
     return (
             <div className="App"> 
                   <Switch>
-                      <Route exact path="/" render={() => <Profile state={this.state} user={this.state.user} handleChange={this.handleChange} toConcat={this.toConcat}  fetchData={this.fetchData} />
+                      <Route exact path="/" render={() => <Profile state={this.state}  handleChange={this.handleChange} toConcat={this.toConcat}  fetchData={this.fetchData} />
                   } />
-                      <Route exact path="/repos" render={() => <Repos state={this.state} user={this.state.user} handleChange={this.handleChange} toConcat={this.toConcat}  fetchData={this.fetchData} />
+                      <Route exact path="/repos" render={() => <Repos state={this.state} name={this.state.user.name} handleChange={this.handleChange} toConcat={this.toConcat}  fetchData={this.fetchData} />
                   } />
                   </Switch>
             </div>
