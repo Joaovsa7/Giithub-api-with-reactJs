@@ -6,7 +6,7 @@ const Container = (props) => {
     return(
         <div className="container">
             <div className={`${props.state.anyError === false ? 'hide' : 'show toAnime'}`}>
-                { props.state.noInput === true ? <span>O campo não pode estar vazio!</span> : <span>Usuário não encontrado :/ tenta de novo?</span> }
+                {<span>{props.state.errorInfo}</span> }
             </div>
             <div id="content">
                 <div id="search" className={`${props.estado.showSearch === false ? 'hide' : ''}`}>

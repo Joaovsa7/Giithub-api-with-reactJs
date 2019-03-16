@@ -20,11 +20,8 @@ class App extends Component {
         html_url: undefined,
         id: undefined,
       }],
-      name: undefined,
-      repos: [],
-      noInput: false,
+      errorInfo: false,
       anyError: false,
-      bigThanTwo: false,
       showRep: false,
       value: ''
     }
@@ -35,29 +32,32 @@ class App extends Component {
     if(this.state.username === undefined) return false;
     this.fetchData();
   }
-  fetchData(){
+  fetchData = () => {
     const controller = new AbortController();
     const signal = controller.signal
-    if(this.state.value === undefined || this.state.value === ''){
-      this.setState({noInput: true, anyError: true})
-      controller.abort();
-      return false;
+    if(this.state.value === ""){
+      this.setState({anyError: true, errorInfo: "O campo não pode estar vazio"})
+      controller.abort()
+      return false
     }
     const urlTofetch = `https://api.github.com/users/${this.state.value}`
     fetch(urlTofetch)
-    .then(response => response.json())
-    .then(data => {
-      this.setState({
-        user:[data], 
-        showRep: true, 
-        value: ''})
-      if(data.login === undefined){
-        this.setState({anyError: true, showRep: false, value: ''})
-        controller.abort();
+    .catch(err => {this.setState({ anyError: true, errorInfo: `${err}`})
+      return false;
+    })
+    .then(response => {
+      if(response.status === 403){
+        this.setState({anyError: true, errorInfo: "Você realizou muitas solicitações erradas, tente novamente em alguns minutos"})
+      }
+      if(response.status === 404){
+        this.setState({anyError: true, errorInfo: "O Usuário não foi encontrado"})
+      }
+      if(response.status === 200){
+        response.json()
+        .then(response => {this.setState({ user:[response], showRep: true, value: ''})})
       }
     })
-    //preciso tratar melhor o erro do .catch
-    .catch(err => {this.setState({anyError: true})});
+    .catch(err => {this.setState({anyError: true, errorInfo: `${err}`})});
   }
   handleChange(event){
       this.setState({
@@ -88,11 +88,6 @@ class App extends Component {
         );
       }
     }
-  
-  App.defaultState = {
-    username: 'Search your user',
-    showRep: false
-  }
 
   export default App;
   
