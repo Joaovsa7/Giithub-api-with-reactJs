@@ -20,8 +20,9 @@ class App extends Component {
         html_url: undefined,
         id: undefined,
       }],
-      errorInfo: false,
-      anyError: false,
+      msgInfo: false,
+      msgBox: false,
+      loading: false,
       showRep: false,
       value: ''
     }
@@ -32,38 +33,49 @@ class App extends Component {
     if(this.state.username === undefined) return false;
     this.fetchData();
   }
+  loadingComponent(){
+    this.setState({
+      loading: true,
+      msgBox: true,
+      msgInfo: `Carregando...` 
+    })
+  }
   fetchData = () => {
     const controller = new AbortController();
     const signal = controller.signal
     if(this.state.value === ""){
-      this.setState({anyError: true, errorInfo: "O campo não pode estar vazio"})
+      this.setState({msgBox: true, msgInfo: "O campo não pode estar vazio"})
       controller.abort()
       return false
     }
     const urlTofetch = `https://api.github.com/users/${this.state.value}`
     fetch(urlTofetch)
-    .catch(err => {this.setState({ anyError: true, errorInfo: `${err}`})
+    .catch(err => {this.setState({ msgBox: true, msgInfo: `${err}`})
       return false;
     })
     .then(response => {
       if(response.status === 403){
-        this.setState({anyError: true, errorInfo: "Você realizou muitas solicitações erradas, tente novamente em alguns minutos"})
+        this.setState({msgBox: true, msgInfo: "Você realizou muitas solicitações erradas, tente novamente em alguns minutos"})
       }
       if(response.status === 404){
-        this.setState({anyError: true, errorInfo: "O Usuário não foi encontrado"})
+        this.setState({msgBox: true, msgInfo: "O Usuário não foi encontrado"})
       }
       if(response.status === 200){
-        response.json()
-        .then(response => {this.setState({ user:[response], showRep: true, value: ''})})
+        this.loadingComponent()
+        setTimeout(() => {
+          response.json()
+          .then(response => {
+              this.setState({ user:[response], showRep: true, value: '', msgBox: false})})
+        }, 2000);
       }
     })
-    .catch(err => {this.setState({anyError: true, errorInfo: `${err}`})});
+    .catch(err => {this.setState({msgBox: true, msgInfo: `${err}`})});
   }
   handleChange(event){
       this.setState({
         value: event.target.value.trim(),
         username: event.target.value.trim(),
-        anyError: false,
+        msgBox: false,
       })
     }
 

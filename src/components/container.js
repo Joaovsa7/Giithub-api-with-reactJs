@@ -5,8 +5,8 @@ import Style from '../styles/style.scss'
 const Container = (props) => {
     return(
         <div className="container">
-            <div className={`${props.state.anyError === false ? 'hide' : 'show toAnime'}`}>
-                {<span>{props.state.errorInfo}</span> }
+            <div className={`${props.state.msgBox === false ? 'hide' : 'show toAnime'}`}>
+                {<span>{props.state.msgInfo}</span> }
             </div>
             <div id="content">
                 <div id="search" className={`${props.estado.showSearch === false ? 'hide' : ''}`}>
