@@ -16,12 +16,12 @@ $secondaryColor: white;
 
 @keyframes toShow{
     0% {
-        opacity: 0;
+        opacity: 1;
         transform: translateX(-80px)
     }
     100% {
-        opacity: 1;
-        transform: translateX(0px);
+                transform: translateX(0px);
+                display: none;
     }
 }
 
@@ -37,15 +37,12 @@ $secondaryColor: white;
     flex-direction: column;
     width: 100vw;
     height: 100vh;
-    .disabledDiv {
-        pointer-events: none;
-        opacity: 0.4;
-    }
     .hide {
         display: none!important;        
         transition: .3s all;
     }
     .show {
+        animation: .4s toShow ease;
         @include centerAll();
         max-width: 600px; 
         width: 100%;
@@ -54,7 +51,6 @@ $secondaryColor: white;
         border: 1px solid $mainColor;
         margin-bottom: 10px;
         border-radius: 4px;
-        animation: .4s toShow ease-in-out;
     }
     > #content {
         border: 1px solid $mainColor;

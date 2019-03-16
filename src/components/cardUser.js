@@ -11,7 +11,7 @@ class CardUser extends Component {
                         <img src={cardUser.avatar_url === undefined ? require('../assets/default.jpg') : `${cardUser.avatar_url}`} alt="profile pic" />
                     </div>
                     <div id="description">
-                        <h3>{cardUser.name === null ? cardUser.login : cardUser.name}</h3>
+                        <h3>{cardUser.name === null || cardUser.name === undefined ? cardUser.login : cardUser.name}</h3>
                         <p>{cardUser.bio === undefined || cardUser.bio === null ? 'Este usuário não possui biografia no github, provavelmente esqueceu de por ou não se importa com isso' : cardUser.bio}</p>
                         <div id="boxInfos">
                             <div className="apiInfos">

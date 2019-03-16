@@ -33,39 +33,47 @@ class App extends Component {
     if(this.state.username === undefined) return false;
     this.fetchData();
   }
-  loadingComponent(){
+
+  backToDefault(){
+    this.setState({user:[{}]})
+  }
+  msgFunction(mensagem){
     this.setState({
       loading: true,
       msgBox: true,
-      msgInfo: `Carregando...` 
+      msgInfo: `${mensagem}` ,
+      value: ''
     })
+    setTimeout(() => {
+      this.setState({msgBox: false})
+    }, 2000);
+
   }
   fetchData = () => {
     const controller = new AbortController();
     const signal = controller.signal
     if(this.state.value === ""){
-      this.setState({msgBox: true, msgInfo: "O campo não pode estar vazio"})
+      this.msgFunction('O campo não pode estar vazio')
       controller.abort()
       return false
     }
     const urlTofetch = `https://api.github.com/users/${this.state.value}`
     fetch(urlTofetch)
-    .catch(err => {this.setState({ msgBox: true, msgInfo: `${err}`})
-      return false;
-    })
+    .catch(err => {this.msgFunction(err)})
     .then(response => {
       if(response.status === 403){
-        this.setState({msgBox: true, msgInfo: "Você realizou muitas solicitações erradas, tente novamente em alguns minutos"})
+        this.msgFunction('Você realizou muitas tentativas erradas, faça nvoamente em alguns minutos')
       }
       if(response.status === 404){
-        this.setState({msgBox: true, msgInfo: "O Usuário não foi encontrado"})
+        this.msgFunction(`O usuário ${this.state.value} não foi encontrado`)
+        this.backToDefault()
       }
       if(response.status === 200){
-        this.loadingComponent()
+        this.msgFunction('Carregando...')
         setTimeout(() => {
           response.json()
           .then(response => {
-              this.setState({ user:[response], showRep: true, value: '', msgBox: false})})
+              this.setState({ user:[response], showRep: true})})
         }, 2000);
       }
     })
