@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React, { Component, useState ,useEffect } from 'react';
 import * as Styles from './styles/style.scss'
 import CardUser from './components/cardUser';
 import Profile from './components/profile';
@@ -10,21 +10,11 @@ class App extends Component {
   constructor(props){
     super(props)
     this.state = {
-      user: [{
-        username: undefined,
-        login: undefined,
-        avatar_url: undefined,
-        followers: undefined,
-        following: undefined,
-        location: undefined,
-        html_url: undefined,
-        id: undefined,
-      }],
+      user: [{}],
       msgInfo: false,
       msgBox: false,
-      loading: false,
       showRep: false,
-      value: ''
+      value: '',
     }
     this.fetchData = this.fetchData.bind(this)
     this.handleChange = this.handleChange.bind(this)
@@ -34,24 +24,19 @@ class App extends Component {
     this.fetchData();
   }
 
-  backToDefault(){
-    this.setState({user:[{}]})
-  }
+  backToDefault(){this.setState({user:[{}], value: ''}) }
+
   msgFunction(mensagem){
     this.setState({
-      loading: true,
       msgBox: true,
-      msgInfo: `${mensagem}` ,
+      msgInfo: `${mensagem}`,
       value: ''
     })
-    setTimeout(() => {
-      this.setState({msgBox: false})
-    }, 2000);
-
   }
-  fetchData = () => {
+  fetchData(){
     const controller = new AbortController();
     const signal = controller.signal
+    this.msgFunction('Carregando...')
     if(this.state.value === ""){
       this.msgFunction('O campo não pode estar vazio')
       controller.abort()
@@ -62,18 +47,16 @@ class App extends Component {
     .catch(err => {this.msgFunction(err)})
     .then(response => {
       if(response.status === 403){
-        this.msgFunction('Você realizou muitas tentativas erradas, faça nvoamente em alguns minutos')
+        this.msgFunction('Você realizou muitas tentativas erradas, tente novamente em alguns minutos')
       }
       if(response.status === 404){
         this.msgFunction(`O usuário ${this.state.value} não foi encontrado`)
         this.backToDefault()
       }
       if(response.status === 200){
-        this.msgFunction('Carregando...')
         setTimeout(() => {
           response.json()
-          .then(response => {
-              this.setState({ user:[response], showRep: true})})
+          .then(response => { this.setState({ user:[response], showRep: true, msgBox: false})})
         }, 2000);
       }
     })
